@@ -7,45 +7,6 @@
 	<h1>Hexagon Heuristics</h1>
 	<h2>Six Principles</h2>
 
-	<h3>Overview</h3>
-	<p>
-		These six principles are a set of guidelines for software design. They are intended to make
-		software more understandable, easier to maintain, and more secure.
-	</p>
-
-	<ol>
-		<li>
-			<a href="https://en.wikipedia.org/wiki/Principle_of_least_astonishment">
-				Principle of Least Astonishment
-			</a>
-		</li>
-		<li>
-			<a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">
-				Principle of Least Privilege
-			</a>
-		</li>
-		<li>
-			<a href="https://en.wikipedia.org/wiki/Principle_of_least_common_mechanism">
-				Principle of Least Common Mechanism
-			</a>
-		</li>
-		<li>
-			<a href="https://en.wikipedia.org/wiki/Principle_of_least_effort">
-				Principle of Least Effort
-			</a>
-		</li>
-		<li>
-			<a href="https://en.wikipedia.org/wiki/Principle_of_least_knowledge">
-				Principle of Least Knowledge
-			</a>
-		</li>
-		<li>
-			<a href="https://en.wikipedia.org/wiki/Principle_of_least_astonishment">
-				Principle of Least Surprise
-			</a>
-		</li>
-	</ol>
-
 	<h3>Principle of Least Astonishment</h3>
 	<p>
 		When two elements of an interface conflict, the result should be the least surprising of the
@@ -113,6 +74,45 @@
 
 	<h3>References</h3>
 	<a href="https://en.wikipedia.org/"> Wikipedia </a>
+
+	<h3>Overview</h3>
+	<p>
+		These six principles are a set of guidelines for software design. They are intended to make
+		software more understandable, easier to maintain, and more secure.
+	</p>
+
+	<ol>
+		<li>
+			<a href="https://en.wikipedia.org/wiki/Principle_of_least_astonishment">
+				Principle of Least Astonishment
+			</a>
+		</li>
+		<li>
+			<a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">
+				Principle of Least Privilege
+			</a>
+		</li>
+		<li>
+			<a href="https://en.wikipedia.org/wiki/Principle_of_least_common_mechanism">
+				Principle of Least Common Mechanism
+			</a>
+		</li>
+		<li>
+			<a href="https://en.wikipedia.org/wiki/Principle_of_least_effort">
+				Principle of Least Effort
+			</a>
+		</li>
+		<li>
+			<a href="https://en.wikipedia.org/wiki/Principle_of_least_knowledge">
+				Principle of Least Knowledge
+			</a>
+		</li>
+		<li>
+			<a href="https://en.wikipedia.org/wiki/Principle_of_least_astonishment">
+				Principle of Least Surprise
+			</a>
+		</li>
+	</ol>
 </div>
 
 <style>
