@@ -1,5 +1,3 @@
-<!-- src/routes/+layout.svelte -->
-
 <script>
 	import Navigation from '$lib/ui/Navigation.svelte';
 	import Socials from '$lib/ui/Socials.svelte';
@@ -66,12 +64,40 @@
 		padding-left: 2em;
 	}
 
+	:global(button) {
+		padding: 0;
+		border: none;
+		font: inherit;
+		color: inherit;
+		background-color: transparent;
+		cursor: pointer;
+	}
+
+	:global(i, i::before) {
+		display: flex;
+		justify-content: center;
+		align-content: center;
+		text-align: center;
+		align-items: center;
+	}
+
+	:global(i) {
+		aspect-ratio: 1;
+	}
+
+	:global(strong) {
+		flex-wrap: nowrap;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
     footer, header {
+		vertical-align: bottom;
 		align-self: center;
-		
 		width: fit-content;
         position: sticky;
-        top: 0;
 		z-index: 1;
     }
 	
@@ -84,6 +110,7 @@
 	}
 
 	main {
+		/* max-height: 100%; */
         display: flex;
 		padding: 1rem;
 		flex: 1;

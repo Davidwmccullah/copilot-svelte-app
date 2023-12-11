@@ -1,17 +1,17 @@
-<script>
+<script lang="ts">
   import Hexagon from "../shapes/Hexagon.svelte";
 
-    let todos = [];
-    let newTodo = '';
+    let todos: string[] = [];
+    let newTodo: string = '';
 
-    function addTodo() {
+    let addTodo = (): void => {
         if (newTodo.trim() !== '') {
             todos = [...todos, newTodo];
             newTodo = '';
         }
     }
 
-    function removeTodo(index) {
+    let removeTodo = (index: number): void => {
         todos = todos.filter((_, i) => i !== index);
     }
 </script>
@@ -19,27 +19,27 @@
 <div class="todo-wrapper">
     <Hexagon>
         <input type="text" class="todo-field" bind:value={newTodo} placeholder="Enter a new todo" />
-        <a on:click={addTodo}>
-            <Hexagon className="hexagon-hover" minWidth="7rem">
-                <span>
-                    Submit
-                </span>
+        <button on:click={addTodo}>
+            <Hexagon class="hexagon-hover" minWidth="7rem">
+                <strong>
+                    <i class="fas fa-pen"></i>
+                </strong>
             </Hexagon>
-        </a>
+        </button>
     </Hexagon>
 
     <ul>
         {#each todos as todo, index}
             <li>
-                <Hexagon>
+                <Hexagon class="expand">
                 {todo}
-                <a on:click={() => removeTodo(index)}>
-                    <Hexagon className="hexagon-hover" minWidth="7rem">
-                        <span>
-                            Remove
-                        </span>
+                <button on:click={() => removeTodo(index)}>
+                    <Hexagon class="hexagon-hover warn" style="">
+                        <strong>
+                            <i class="fas fa-trash"></i>
+                        </strong>
                     </Hexagon>
-                </a>
+                </button>
                 </Hexagon>
             </li>
         {/each}
@@ -48,9 +48,11 @@
 
 <style>
     .todo-wrapper {
+        max-height: 100%;
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        align-items: center;
     }
 
     ul {
@@ -58,6 +60,9 @@
         flex-direction: column;
         gap: 1rem;
         text-wrap: wrap;
+        overflow-y: scroll;
+        padding: 0 1rem;
+        width: 100%;
     }
 
     li {
@@ -73,10 +78,21 @@
         border: none;
         outline: none;
         font-size: 1rem;
-        padding: 0.5rem 1rem;
         background: var(--color-surfaceMixed-400);
         color: var(--color-foreground-400);
         border-radius: 0.5rem;
         box-shadow: 0rem 0rem 0.5rem var(--color-surfaceMixed-400);
+        min-width: fit-content;
+    }
+
+    :global(.expand) {
+        flex: 1 1 0;
+    }
+
+    :global(.expand .hexagon) {
+        display: flex;
+        /* always fill available space */
+        flex: 1;
+        justify-content: space-between !important;
     }
 </style>

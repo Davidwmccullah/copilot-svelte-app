@@ -1,13 +1,11 @@
-<!-- lib/ui/Navigation.svelte -->
-
-<script>
+<script lang="ts">
 	import Hexagon from '$lib/shapes/Hexagon.svelte';
 
-	const navItems = [
-		{ label: 'Youtube', href: 'https://www.youtube.com/' },
-		{ label: 'Reddit', href: 'https://www.reddit.com/' },
-		{ label: 'GitHub', href: 'https://www.github.com/' },
-		{ label: 'Gmail', href: 'https://www.gmail.com/' }
+	const navItems: { label: string, icon: string, href: string }[] = [
+		{ label: 'Youtube', icon: 'fab fa-youtube', href: 'https://www.youtube.com/' },
+		{ label: 'Reddit', icon: 'fab fa-reddit-alien', href: 'https://www.reddit.com/' },
+		{ label: 'GitHub', icon: 'fab fa-github', href: 'https://www.github.com/' },
+		{ label: 'Gmail', icon: 'fa-solid fa-envelope', href: 'https://www.gmail.com/' }
 	];
 </script>
 
@@ -15,18 +13,28 @@
 	<nav>
 		<ul>
 			{#each navItems as item}
-				<li><a class="hover-hex" target="_blank" href={item.href}><Hexagon className="hexagon-hover">{item.label}</Hexagon></a></li>
+				<li><a class="hover-hex" target="_blank" href={item.href}><Hexagon class="hexagon-hover"><i class="{item.icon}"></i></Hexagon></a></li>
 			{/each}
 		</ul>
 	</nav>
 </div>
-
 
 <style>
 	.nav-wrapper {
         --nav-height: 4rem;
 		filter: drop-shadow(0rem 0rem 0.5rem rgba(0, 0, 0, 0.5));
 	}
+
+	/* .nav-wrapper {
+        position: fixed;
+		bottom: calc(-1 * var(--nav-height) + 0.75rem);
+        transition: bottom 0.5s ease-in-out;
+		transform: translateX(-50%);
+    }
+
+    .nav-wrapper:hover {
+        bottom: 0;
+    } */
 
 	nav {
 		gap: 1rem;
@@ -40,8 +48,7 @@
 
 	nav ul {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 2rem;
+		gap: 1rem;
 		list-style: none;
 		font-weight: bold;
 		text-transform: uppercase;

@@ -1,4 +1,10 @@
-export const Colors = {
+export interface ColorPallete {
+    [key: string]: {
+        [key: number]: string;
+    };
+}
+
+export const Colors: ColorPallete = {
     primary: {
         100: '#008170',
         200: '#358f7f',
@@ -31,4 +37,12 @@ export const Colors = {
         500: '#cccccc',
         600: '#bfbfbf',
     },
+    red: {
+        100: '#FFEBEE',
+        200: '#FFCDD2',
+        300: '#EF9A9A',
+        400: '#E57373',
+        500: '#F44336',
+        600: '#E53935',
+    }
 };

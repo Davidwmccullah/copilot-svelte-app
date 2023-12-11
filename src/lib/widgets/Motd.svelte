@@ -1,5 +1,5 @@
-<script>
-    let message = "Welcome Home.";
+<script lang="ts">
+    let message: string = "Welcome Home.";
 </script>
 
 <div class="motd-wrapper">

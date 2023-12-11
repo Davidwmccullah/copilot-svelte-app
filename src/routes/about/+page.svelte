@@ -1,5 +1,3 @@
-<!-- routes/+page.svelte -->
-
 <script>
 </script>
 
