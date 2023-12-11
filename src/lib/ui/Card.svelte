@@ -1,11 +1,10 @@
-<script>
+<script lang="ts">
 	import Hexagon from '$lib/shapes/Hexagon.svelte';
 
-	export let gridArea = '';
-	export let title = '';
+	export let title: string = '';
 </script>
 
-<div class="card-wrapper" style="grid-area: {gridArea}">
+<div class="card-wrapper" style={$$props.style}>
 	<div class="card">
 		{#if title}
 		<Hexagon>
@@ -16,7 +15,6 @@
 		<div class="content">
 			<slot />
 		</div>
-
 	</div>
 </div>
 

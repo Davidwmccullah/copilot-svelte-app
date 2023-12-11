@@ -1,4 +1,6 @@
-<!-- routes/+page.svelte -->
+<svelte:head>
+    <title>Dashboard</title> 
+</svelte:head>
 
 <script>
 	import Card from '$lib/ui/Card.svelte';
@@ -9,36 +11,42 @@
 </script>
 
 <div class="home-wrapper">
-	<Card title="Visualizer" gridArea="vis">
+	<Card title ="Clock" style="grid-area: clk">
+		<Clock />
+	</Card>
+	<Card title="Visualizer" style="grid-area: vis">
 		<Visualizer />
 	</Card>
-	<Card title ="Clock" gridArea="clk">
-		<Clock />
-	</Card>
-	<Card title ="Clock" gridArea="c">
-		<Clock />
-	</Card>
-	<Card title ="Todo" gridArea="tdo">
-		<Todo />
-	</Card>
-	<Card title ="MotD" gridArea="mtd">
+	<Card title ="Message of the Day" style="grid-area: mtd">
 		<Motd />
 	</Card>
+	<Card title ="To Do" style="grid-area: tdo">
+		<Todo />
+	</Card>
+
 </div>
 
 <style>
 	.home-wrapper {
 		width: 90rem;
 		max-width: 100%;
+		min-width: 20rem;
 	}
 
 	:global(.home-wrapper) {
 		display: grid;
 		grid-gap: 1rem;
 		grid-template-areas:
-			"mtd mtd clk clk clk "
-			"mtd mtd tdo tdo tdo "
-			"vis vis tdo tdo tdo "
-			" c   c  tdo tdo tdo " ;
+			"mtd mtd mtd mtd clk "
+			"vis vis vis tdo tdo "
+			"vis vis vis tdo tdo "
+			"vis vis vis tdo tdo " ;
+	}
+
+	@media (max-width: 60rem) {
+		.home-wrapper {
+			display: flex;
+			flex-direction: column;
+		}
 	}
 </style>

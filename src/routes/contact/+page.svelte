@@ -1,13 +1,9 @@
-<!-- routes/+page.svelte -->
-
 <script>
 </script>
 
 <div>
 	<h1>Hexagon Heuristics</h1>
 	<h2>Six Principles</h2>
-
-	
 
 	<h3>Principle of Least Common Mechanism</h3>
 	<p>

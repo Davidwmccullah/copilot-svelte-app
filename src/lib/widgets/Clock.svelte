@@ -1,19 +1,19 @@
-<script>
+<script lang="ts">
     import { onMount, onDestroy } from 'svelte';
 
-    let currentTime = new Date();
+    let currentTime: Date = new Date();
 
-    const updateTime = () => {
+    let updateTime = (): void => {
         currentTime = new Date();
     };
 
-    let interval;
+    let interval: number = 0;
 
-    onMount(() => {
+    onMount((): void => {
         interval = setInterval(updateTime, 1000);
     });
 
-    onDestroy(() => {
+    onDestroy((): void => {
         clearInterval(interval);
     });
 </script>
