@@ -7,7 +7,7 @@
 	import Visualizer from '$lib/widgets/Visualizer.svelte';
 	import Clock from '$lib/widgets/Clock.svelte';
   	import Todo from '../lib/widgets/Todo.svelte';
-  import Motd from '../lib/widgets/Motd.svelte';
+  	import Motd from '../lib/widgets/Motd.svelte';
 </script>
 
 <div class="home-wrapper">

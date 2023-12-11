@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getapi } from "$lib/utils/api";
+    import { getapi } from "$lib/utils/api.ts";
   import { onMount } from "svelte";
 
     let message: string = "";

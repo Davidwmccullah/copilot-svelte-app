@@ -1,7 +1,7 @@
 <script>
 	import Navigation from '$lib/ui/Navigation.svelte';
 	import Socials from '$lib/ui/Socials.svelte';
-	import { Colors } from '$lib/ui/Colors';
+	import { Colors } from '$lib/ui/Colors.ts';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
