@@ -9,6 +9,7 @@
         "audio/K3NZH - Still 50 Cent.m4a",
         "audio/Mechanicus OST.m4a",
         "audio/Mehdibh - Sekiro.wav",
+        "audio/Darktide - Waiting to Strike + Imperial Strike.m4a",
     ]
 
     let visualizerWrapper: HTMLDivElement | null = null;
