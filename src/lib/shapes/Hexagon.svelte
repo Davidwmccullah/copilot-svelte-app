@@ -66,4 +66,8 @@
     color: var(--color-foreground-100);
     background: var(--color-red-500);
   }
+
+  .gap {
+    gap: 1rem;
+  }
 </style>

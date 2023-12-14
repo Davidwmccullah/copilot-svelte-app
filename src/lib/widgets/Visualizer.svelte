@@ -315,7 +315,7 @@
             </button>
         </div>
 
-        <Hexagon>
+        <Hexagon class="gap">
             <span>{formatTime(currentTime)}&nbsp;/&nbsp;{formatTime(duration)}</span>
             
             <div class="slider-wrapper">
@@ -323,7 +323,7 @@
             </div>
         </Hexagon>
         
-        <Hexagon>
+        <Hexagon class="gap">
             <button on:click={handleVolumeIconClick}>
                 {#if audio.muted}
                     <i class="fas fa-volume-mute"></i>
