@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from "svelte";
-    import { toRadians } from "$lib/utils/math.ts";
-    import { formatTime } from "$lib/utils/format.ts";
-	import { Colors } from "$lib/ui/Colors.ts";
+    import { toRadians } from "$lib/utils/math";
+    import { formatTime } from "$lib/utils/format";
+	import { Colors } from "$lib/ui/Colors";
     import Hexagon from "$lib/shapes/Hexagon.svelte";
 
     let playlist: string[] = [
