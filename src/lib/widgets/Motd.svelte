@@ -1,16 +1,5 @@
 <script lang="ts">
-    import { getapi } from "$lib/utils/api.ts";
-  import { onMount } from "svelte";
-
-    let message: string = "";
-
-    let api_url: string = "https://api.example.com";
-
-    onMount((): void => {
-        getapi(api_url).then((res: any) => {
-            message = res;
-        });
-    });
+    let message: string = "Hello, World!";
 </script>
 
 <div class="motd-wrapper">

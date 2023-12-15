@@ -18,7 +18,7 @@
     let audio: HTMLAudioElement | null = null;
     let audioSrc: MediaElementAudioSourceNode | null = null;
     let analyser: AnalyserNode | null = null;
-    let fftSize: number = 512;
+    let fftSize: number = 2 * 2 * 4 * 4 * 4 * 4 * 4 * 4;
     let dataArray: Uint8Array | null = null;
     let isPlaying: boolean = false;
     let animationFrameId: number = 0;
@@ -32,6 +32,7 @@
     let numSides: number = 6;
     let filled = true;
     let mirrored = true;
+    let fileInput: HTMLInputElement | null = null;
 
     onMount((): void => {
         initAudio();
@@ -78,6 +79,21 @@
         shufflePlaylist(playlist);
         audio.src = playlist[0];
         setSongTitle(audio.src);
+    };
+
+    let initCustomAudio = (src: string): void => {
+        if (!audio || !fileInput) return;
+
+        let file: File | null = fileInput?.files?.[0] || null;
+
+        if (isPlaying) {
+            handlePlay();
+        }
+
+        audio.src = src;
+        if (file) {
+            songTitle = decodeURIComponent(file.name.split('.').slice(0, -1).join('.'));
+        }
     };
 
     let shufflePlaylist = (playlist: string[]): void => {
@@ -149,8 +165,12 @@
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
 
+        // let data: Uint8Array = dataArray;
+
         let data: Uint8Array = smooth_data(dataArray, 10);
         data = sample(data, 64);
+
+        // let data: Uint8Array = data.map((x) => {return 255});
 
         drawRectangles(data);
 
@@ -182,7 +202,7 @@
             canvasCtx.fillStyle = linearGradient;
         }
 
-        let radius: number = (Math.min(canvas.height, canvas.width) / 2) * (data.reduce((a, b) => a + b, 0) / data.length / 255);
+        let radius: number = (Math.min(canvas.height, canvas.width) / 4) * (255 / data.reduce((a, b) => a + b, 0) / data.length);
 
         for(let side = 1; side <= numSides; side++) {
             for (let iteration = -1; iteration < (mirrored ? 2 : 0); iteration += 2) {
@@ -191,22 +211,25 @@
                 }
 
                 for (var i = 0; i < data.length; i++) {
-                    let height: number = (data[i] / 255) * (Math.min(canvas.height, canvas.width) / 2 - radius) - canvasCtx.lineWidth;
-                    let rotation: number = 360 * ((i / (data.length - 1) * iteration) + side) / numSides;
+                    let height: number = ((data[i]) / 255) * (Math.min((canvas.height / 2, canvas.width / 2)) - radius);
+                    let rotation: number = (360 * ((i / (data.length - 1) * iteration) + side) / numSides);
 
                     canvasCtx.save();
 
                     canvasCtx.translate(canvas.width / 2, canvas.height / 2);
                     canvasCtx.rotate(toRadians(rotation));
 
-                    if(!filled && !mirrored && i === 0) {
-                        canvasCtx.lineTo(0, radius + (data[data.length - 1] / 255) * (Math.min(canvas.height, canvas.width) / 2 - radius) - canvasCtx.lineWidth);
-                    }
+                    // if(!filled && !mirrored && i === 0) {
+                    //     canvasCtx.lineTo(0, radius + (data[data.length - 1] / 255) * (Math.min(canvas.height, canvas.width) / 2 - radius) - canvasCtx.lineWidth);
+                    // }
 
-                    if(filled) {
-                        canvasCtx.fillRect(-canvasCtx.lineWidth / 2, radius, canvasCtx.lineWidth, height);
+                    const percentage = 0.75;
+
+                    if (filled) {
+                        canvasCtx.fillRect(-canvasCtx.lineWidth / 2, (radius - (height * percentage)) / percentage, canvasCtx.lineWidth, (height - (height * percentage)) / percentage);
                     } else {
-                        canvasCtx.lineTo(0, radius + height);
+                        canvasCtx.rotate(toRadians(180));
+                        canvasCtx.lineTo(0, (radius + (height * percentage)) / percentage);
                     }
 
                     canvasCtx.restore();
@@ -219,26 +242,6 @@
         }
     }
 
-    // for (var i = 0; i < data.length; i++) {
-    //     let radius: number = (Math.min(canvas.height, canvas.width) / 2) * (data.reduce((a, b) => a + b, 0) / data.length / 255);
-
-    //     let height: number = (data[i] / 255) * (Math.min(canvas.height, canvas.width) / 2 - radius) - canvasCtx.lineWidth;
-    //     let rotation: number = 180 * i / (data.length - 1);
-
-        
-    //     for (let iteration = 0; iteration < 2; iteration++) {
-    //         canvasCtx.save();
-
-    //         canvasCtx.translate(canvas.width / 2, canvas.height / 2);
-    //         canvasCtx.rotate(toRadians(rotation + (180 * iteration)));
-
-    //         canvasCtx.fillStyle = linearGradient;                
-    //         canvasCtx.fillRect(-canvasCtx.lineWidth / 2, radius, canvasCtx.lineWidth, height);
-
-    //         canvasCtx.restore();
-    //     }
-    // }
-    
     let handlePlay = (): void => {
         if (!audio) return;
 
@@ -314,18 +317,16 @@
 
         return Uint8Array.from(result);
     }
-
-    let toggle = (x: boolean ): void => {
-        x = !x;
-        console.log(x);    
-    }
 </script>
 
-<div class="vis-wrapper" bind:this={visualizerWrapper}>
+<div class="content-wrapper">
     {#if audio && audio.src}
         <div class="now-playing">{songTitle}</div>
     {/if}
-    <canvas bind:this={canvas} on:click={handlePlay}></canvas>
+    <div class="vis-wrapper" bind:this={visualizerWrapper}>
+        <canvas bind:this={canvas} on:click={handlePlay}></canvas>
+    </div>
+    
     <audio bind:this={audio} on:timeupdate={updateSlider} bind:duration={duration} bind:volume={volume}></audio>
 
     {#if audio}
@@ -413,22 +414,45 @@
                 {/if}
             </button>
         </Hexagon>
+
+        <!-- select song from user input -->
+        <button on:click={() => {fileInput && fileInput.click();}}>
+            <Hexagon class="gap hexagon-hover">
+                <input type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
+                <i class="fas fa-file-audio"></i>
+            </Hexagon>
+        </button>
     </div>
     {/if}
 </div>
 
 <style>
+    .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        height: 100%;
+    }
     .vis-wrapper {
         flex-direction: column;
         flex: 1;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        width: 100%;
+        height: 100%;
+        min-width: 16.5rem;
+        min-height: 16.5rem;
+        position: relative;
     }
-    
+
     canvas {
-        max-width: 512px;
-        max-height: 512px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .controls {
@@ -478,11 +502,23 @@
         text-shadow: 0rem 0rem 0.25rem var(--color-primary-300);
         font-weight: bold;
         text-align: center;
+        width: 100%;
+        padding: 0;
+        margin: 0;
     }
 
     i {
         height: 1.375rem;
         display: flex;
         align-items: center;
+    }
+
+    input[type="file"] {
+        display: flex;
+        background: var(--color-surface-200);
+        padding: 0;
+        max-height: 1rem;
+        clip-path: polygon(5% 0%, calc(100% - 5%) 0%, 100% 50%, calc(100% - 5%) 100%, 5% 100%, 0% 50%);
+        transition: 0.3s all;
     }
 </style>

@@ -14,16 +14,15 @@
 	<Card title ="Clock" style="grid-area: clk">
 		<Clock />
 	</Card>
-	<Card title="Visualizer" style="grid-area: vis">
-		<Visualizer />
-	</Card>
 	<Card title ="Message of the Day" style="grid-area: mtd">
 		<Motd />
+	</Card>
+	<Card title="Visualizer" style="grid-area: vis">
+		<Visualizer />
 	</Card>
 	<Card title ="To Do" style="grid-area: tdo">
 		<Todo />
 	</Card>
-
 </div>
 
 <style>
@@ -41,6 +40,7 @@
 			"vis vis vis tdo tdo "
 			"vis vis vis tdo tdo "
 			"vis vis vis tdo tdo " ;
+			/* "vis"; */
 	}
 
 	@media (max-width: 60rem) {

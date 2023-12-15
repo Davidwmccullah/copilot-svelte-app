@@ -5,9 +5,9 @@
 <div
   class="hexagon-wrapper {$$props.class}"
   bind:clientHeight={height}
-  style="--clip-height: {height / 3}px"
+  style="--clip-height: {height / 3}px; {$$props.style};"
 >
-  <div class="hexagon" style={$$props.style}>
+  <div class="hexagon">
     <slot />
   </div>
 </div>
