@@ -1,7 +1,7 @@
 <script>
 	import Navigation from '$lib/ui/Navigation.svelte';
 	import Socials from '$lib/ui/Socials.svelte';
-	import { Colors } from '$lib/ui/Colors.ts';
+	import { Colors } from '$lib/ui/Colors';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
@@ -110,7 +110,6 @@
 	}
 
 	main {
-		/* max-height: 100%; */
         display: flex;
 		padding: 1rem;
 		flex: 1;
