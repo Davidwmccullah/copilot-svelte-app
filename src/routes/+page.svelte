@@ -43,7 +43,7 @@
 			/* "vis"; */
 	}
 
-	@media (max-width: 60rem) {
+	@media (max-width: 48rem) {
 		.home-wrapper {
 			display: flex;
 			flex-direction: column;
