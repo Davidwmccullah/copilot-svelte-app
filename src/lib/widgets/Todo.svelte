@@ -28,6 +28,9 @@
         </button>
     </Hexagon>
 
+    <Hexagon style="min-width: 100%;">
+    </Hexagon>
+
     <ul>
         {#each todos as todo, index}
             <li>
@@ -61,7 +64,7 @@
         gap: 1rem;
         text-wrap: wrap;
         overflow-y: scroll;
-        padding: 0 1rem;
+        padding: 1rem;
         width: 100%;
     }
 

@@ -9,6 +9,7 @@
         "audio/K3NZH - Still 50 Cent.m4a",
         "audio/Mechanicus OST.m4a",
         "audio/Mehdibh - Sekiro.wav",
+        "audio/Darktide - Waiting to Strike + Imperial Strike.m4a",
     ]
 
     let visualizerWrapper: HTMLDivElement | null = null;
@@ -17,7 +18,7 @@
     let audio: HTMLAudioElement | null = null;
     let audioSrc: MediaElementAudioSourceNode | null = null;
     let analyser: AnalyserNode | null = null;
-    let fftSize: number = 512;
+    let fftSize: number = 2 * 2 * 4 * 4 * 4 * 4 * 4 * 4;
     let dataArray: Uint8Array | null = null;
     let isPlaying: boolean = false;
     let animationFrameId: number = 0;
@@ -27,7 +28,11 @@
     let volume: number = 0.5;
     let sliderLocked: boolean = false;
     let currentSongIndex: number = 0;
-    let songTitle: string = '';
+    let songTitle: string = 'No Song Selected';
+    let numSides: number = 6;
+    let filled = true;
+    let mirrored = true;
+    let fileInput: HTMLInputElement | null = null;
 
     onMount((): void => {
         initAudio();
@@ -74,6 +79,21 @@
         shufflePlaylist(playlist);
         audio.src = playlist[0];
         setSongTitle(audio.src);
+    };
+
+    let initCustomAudio = (src: string): void => {
+        if (!audio || !fileInput) return;
+
+        let file: File | null = fileInput?.files?.[0] || null;
+
+        if (isPlaying) {
+            handlePlay();
+        }
+
+        audio.src = src;
+        if (file) {
+            songTitle = decodeURIComponent(file.name.split('.').slice(0, -1).join('.'));
+        }
     };
 
     let shufflePlaylist = (playlist: string[]): void => {
@@ -144,9 +164,13 @@
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
+      
+        // let data: Uint8Array = dataArray;
 
         let data: Uint8Array = smooth_data(dataArray, 10);
         data = sample(data, 64);
+
+        // let data: Uint8Array = data.map((x) => {return 255});
 
         drawRectangles(data);
 
@@ -158,30 +182,62 @@
     let drawRectangles = (data: Uint8Array): void => {
         if (!canvas || !canvasCtx) return;
 
-        let width: number = 2;
+        canvasCtx.lineWidth = 2;
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-        let gradient: CanvasGradient = canvasCtx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, Colors["primary"]["600"]);
-        gradient.addColorStop(0.5, Colors["surface"]["200"]);
+        if(!filled) {
+            let radialGradient: CanvasGradient = canvasCtx.createRadialGradient(
+                canvas.width / 2, canvas.height / 2, 0,
+                canvas.width / 2, canvas.height / 2, Math.min(canvas.width, canvas.height) / 2
+            );
+            radialGradient.addColorStop(0, Colors["primary"]["600"]);
+            radialGradient.addColorStop(1, Colors["surface"]["200"]);
+            canvasCtx.strokeStyle = radialGradient;
+        } else {
+            let linearGradient: CanvasGradient = canvasCtx.createLinearGradient(
+                0, 0, canvas.width, canvas.height
+            );
+            linearGradient.addColorStop(0, Colors["primary"]["600"]);
+            linearGradient.addColorStop(1, Colors["surface"]["200"]);
+            canvasCtx.fillStyle = linearGradient;
+        }
 
-        for (var i = 0; i < data.length; i++) {
-            let radius: number = (Math.min(canvas.height, canvas.width) / 2) * (data.reduce((a, b) => a + b, 0) / data.length / 255);
+        let radius: number = (Math.min(canvas.height, canvas.width) / 4) * (255 / data.reduce((a, b) => a + b, 0) / data.length);
 
-            let height: number = (data[i] / 255) * (Math.min(canvas.height, canvas.width) / 2 - radius) - canvasCtx.lineWidth;
-            let rotation: number = 180 * i / (data.length - 1);
+        for(let side = 1; side <= numSides; side++) {
+            for (let iteration = -1; iteration < (mirrored ? 2 : 0); iteration += 2) {
+                if(!filled) {
+                    canvasCtx.beginPath();
+                }
 
-            
-            for (let iteration = 0; iteration < 2; iteration++) {
-                canvasCtx.save();
+                for (var i = 0; i < data.length; i++) {
+                    let height: number = ((data[i]) / 255) * (Math.min((canvas.height / 2, canvas.width / 2)) - radius);
+                    let rotation: number = (360 * ((i / (data.length - 1) * iteration) + side) / numSides);
 
-                canvasCtx.translate(canvas.width / 2, canvas.height / 2);
-                canvasCtx.rotate(toRadians(rotation + (180 * iteration)));
+                    canvasCtx.save();
 
-                canvasCtx.fillStyle = gradient;                
-                canvasCtx.fillRect(-width / 2, radius, width, height);
+                    canvasCtx.translate(canvas.width / 2, canvas.height / 2);
+                    canvasCtx.rotate(toRadians(rotation));
 
-                canvasCtx.restore();
+                    // if(!filled && !mirrored && i === 0) {
+                    //     canvasCtx.lineTo(0, radius + (data[data.length - 1] / 255) * (Math.min(canvas.height, canvas.width) / 2 - radius) - canvasCtx.lineWidth);
+                    // }
+
+                    const percentage = 0.75;
+
+                    if (filled) {
+                        canvasCtx.fillRect(-canvasCtx.lineWidth / 2, (radius - (height * percentage)) / percentage, canvasCtx.lineWidth, (height - (height * percentage)) / percentage);
+                    } else {
+                        canvasCtx.rotate(toRadians(180));
+                        canvasCtx.lineTo(0, (radius + (height * percentage)) / percentage);
+                    }
+
+                    canvasCtx.restore();
+                }
+                
+                if(!filled) {
+                    canvasCtx.stroke();
+                }
             }
         }
     }
@@ -238,7 +294,7 @@
             let endIndex: number = Math.min(length - 1, i + num_neighbors);
 
             for (let j = startIndex; j <= endIndex; j++) {
-                if (j !== i) { // Skip the current index since we already added it to the sum
+                if (j !== i) { 
                     sum += data[j];
                     count++;
                 }
@@ -263,11 +319,14 @@
     }
 </script>
 
-<div class="vis-wrapper" bind:this={visualizerWrapper}>
+<div class="content-wrapper">
     {#if audio && audio.src}
         <div class="now-playing">{songTitle}</div>
     {/if}
-    <canvas bind:this={canvas} on:click={handlePlay}></canvas>
+    <div class="vis-wrapper" bind:this={visualizerWrapper}>
+        <canvas bind:this={canvas} on:click={handlePlay}></canvas>
+    </div>
+    
     <audio bind:this={audio} on:timeupdate={updateSlider} bind:duration={duration} bind:volume={volume}></audio>
 
     {#if audio}
@@ -314,7 +373,7 @@
             </button>
         </div>
 
-        <Hexagon>
+        <Hexagon class="gap">
             <span>{formatTime(currentTime)}&nbsp;/&nbsp;{formatTime(duration)}</span>
             
             <div class="slider-wrapper">
@@ -322,7 +381,7 @@
             </div>
         </Hexagon>
         
-        <Hexagon>
+        <Hexagon class="gap">
             <button on:click={handleVolumeIconClick}>
                 {#if audio.muted}
                     <i class="fas fa-volume-mute"></i>
@@ -334,23 +393,66 @@
                 <input type="range" min="0" max="1" step="0.01" bind:value={volume} />
             </div>
         </Hexagon>
+
+        <Hexagon class="gap">
+            <button on:click={() => {filled = !filled}}>
+                {#if filled}
+                    <i class="fas fa-star"></i>
+                {:else}
+                    <i class="far fa-star"></i>
+                {/if}
+
+            </button>
+            <div class="slider-wrapper">
+                <input type="range" min="2" max="16" step="1" bind:value={numSides} />
+            </div>
+            <button on:click={() => {mirrored = !mirrored}}>
+                {#if mirrored}
+                    <i class="fas fa-circle"></i>
+                {:else}
+                    <i class="fas fa-circle-half-stroke"></i>
+                {/if}
+            </button>
+        </Hexagon>
+
+        <!-- select song from user input -->
+        <button on:click={() => {fileInput && fileInput.click();}}>
+            <Hexagon class="gap hexagon-hover">
+                <input type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
+                <i class="fas fa-file-audio"></i>
+            </Hexagon>
+        </button>
     </div>
     {/if}
-    
 </div>
 
 <style>
+    .content-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        height: 100%;
+    }
     .vis-wrapper {
         flex-direction: column;
         flex: 1;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        width: 100%;
+        height: 100%;
+        min-width: 16.5rem;
+        min-height: 16.5rem;
+        position: relative;
     }
-    
+
     canvas {
-        max-width: 512px;
-        max-height: 512px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     .controls {
@@ -400,11 +502,23 @@
         text-shadow: 0rem 0rem 0.25rem var(--color-primary-300);
         font-weight: bold;
         text-align: center;
+        width: 100%;
+        padding: 0;
+        margin: 0;
     }
 
     i {
         height: 1.375rem;
         display: flex;
         align-items: center;
+    }
+
+    input[type="file"] {
+        display: flex;
+        background: var(--color-surface-200);
+        padding: 0;
+        max-height: 1rem;
+        clip-path: polygon(5% 0%, calc(100% - 5%) 0%, 100% 50%, calc(100% - 5%) 100%, 5% 100%, 0% 50%);
+        transition: 0.3s all;
     }
 </style>

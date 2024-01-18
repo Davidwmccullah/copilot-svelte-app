@@ -21,6 +21,7 @@
 <style>
 	.card-wrapper {
 		display: flex;
+		flex: 1;
 		justify-content: center;
 		filter: drop-shadow(0rem 0rem 0.5rem rgba(0, 0, 0, 0.25));
 	}
