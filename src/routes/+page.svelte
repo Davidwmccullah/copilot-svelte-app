@@ -23,6 +23,10 @@
 	<Card title ="To Do" style="grid-area: tdo">
 		<Todo />
 	</Card>
+	<Card title ="To Do" style="grid-area: tdo">
+		<Todo />
+	</Card>
+
 </div>
 
 <style>

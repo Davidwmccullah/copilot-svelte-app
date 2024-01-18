@@ -110,6 +110,7 @@
 	}
 
 	main {
+		/* max-height: 100%; */
         display: flex;
 		padding: 1rem;
 		flex: 1;

@@ -164,7 +164,7 @@
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
-
+      
         // let data: Uint8Array = dataArray;
 
         let data: Uint8Array = smooth_data(dataArray, 10);

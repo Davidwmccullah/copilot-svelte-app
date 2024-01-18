@@ -66,7 +66,7 @@
     color: var(--color-foreground-100);
     background: var(--color-red-500);
   }
-
+  
   .gap .hexagon {
     display: flex;
     gap: 1rem;
