@@ -342,21 +342,21 @@
     {#if audio}
     <div class="controls">
         <div class="control-group">
-            <button on:click={() => {loopPlaylist(false);}}>
+            <button aria-label="Previous" on:click={() => {loopPlaylist(false);}}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         <i class="fas fa-undo"></i>
                     </strong>
                 </Hexagon>
             </button>
-            <button on:click={() => {updateTime(-5);}}>
+            <button aria-label="Rewind" on:click={() => {updateTime(-5);}}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         <i class="fas fa-backward-step"></i>
                     </strong>
                 </Hexagon>
             </button>
-            <button on:click={handlePlay}>
+            <button aria-label="Pause/Play" on:click={handlePlay}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         {#if isPlaying}
@@ -367,14 +367,14 @@
                     </strong>
                 </Hexagon>
             </button>
-            <button on:click={() => {updateTime(5);}}>
+            <button aria-label="Fast Forward" on:click={() => {updateTime(5);}}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         <i class="fas fa-forward-step"></i>
                     </strong>
                 </Hexagon>
             </button>
-            <button on:click={() => {loopPlaylist(true);}}>
+            <button aria-label="Next" on:click={() => {loopPlaylist(true);}}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         <i class="fas fa-redo"></i>
