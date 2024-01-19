@@ -178,7 +178,7 @@
         // let data: Uint8Array = dataArray;
 
         let data: Uint8Array = smooth_data(dataArray, 10);
-        data = sample(data, 64);
+        data = sample(data, fftSizeExp * 2);
 
         // let data: Uint8Array = data.map((x) => {return 255});
 
