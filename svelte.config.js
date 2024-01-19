@@ -15,22 +15,14 @@
 //     },
 //     preprocess: preprocess(),
 // };import { https } from 'https';
-import { readFileSync } from 'fs';
 import adapter from '@sveltejs/adapter-node';
 import preprocess from 'svelte-preprocess';
-import https from 'https';
 
-const options = {
-    key: readFileSync('/etc/ssl/world-of-whimsy.key'),
-    cert: readFileSync('/etc/ssl/world-of-whimsy.pem')
-  };
-  
-const createServer = (app) => https.createServer(options, app);
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     kit: {
-        adapter: adapter({ createServer }),
+        adapter: adapter(),
         csp: {
 			directives: {
 				'script-src': ['self']
