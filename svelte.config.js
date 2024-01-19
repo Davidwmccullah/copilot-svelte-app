@@ -30,7 +30,15 @@ const createServer = (app) => https.createServer(options, app);
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     kit: {
-        adapter: adapter({ createServer })
+        adapter: adapter({ createServer }),
+        csp: {
+			directives: {
+				'script-src': ['self']
+			},
+			reportOnly: {
+				'script-src': ['self']
+			}
+		}
     },
     preprocess: preprocess()
 };
