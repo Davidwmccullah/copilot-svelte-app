@@ -18,7 +18,8 @@
     let audio: HTMLAudioElement | null = null;
     let audioSrc: MediaElementAudioSourceNode | null = null;
     let analyser: AnalyserNode | null = null;
-    let fftSize: number = 32; // min is 32, max is 32768, must be a power of 2
+    let fftSizeExp: number = 5;
+    let fftSize: number = Math.pow(2, fftSizeExp); // min is 32, max is 32768
     let dataArray: Uint8Array | null = null;
     let isPlaying: boolean = false;
     let animationFrameId: number = 0;
@@ -418,7 +419,9 @@
 
         <Hexagon class="gap">
             <div class="slider-wrapper">
-                <input type="range" min="32" max="64" step="32" bind:value={fftSize} />
+                <!-- values can must be 32 , 64 , 128 , 256 , 512 , 1024 , 2048 , 4096 , 8192 , 16384 , or 32768, alter the step to accomplish this -->
+                <!-- <input type="range" min="32" max="64" step="32" bind:value={fftSize} /> -->
+                <input type="range" min="5" max="15" step="1" bind:value={fftSizeExp} />
             </div>
         </Hexagon>
 
