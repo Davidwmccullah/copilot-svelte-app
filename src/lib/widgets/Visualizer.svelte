@@ -387,7 +387,7 @@
             <span>{formatTime(currentTime)}&nbsp;/&nbsp;{formatTime(duration)}</span>
             
             <div class="slider-wrapper">
-                <input type="range" min="0" max={duration} bind:value={currentTime} on:input={() => {updateTime(0);}} on:mousedown={lockSlider} on:mouseup={unlockSlider}/>
+                <input aria-label="Time Slider" type="range" min="0" max={duration} bind:value={currentTime} on:input={() => {updateTime(0);}} on:mousedown={lockSlider} on:mouseup={unlockSlider}/>
             </div>
         </Hexagon>
         
@@ -400,12 +400,12 @@
                 {/if}
             </button>
             <div class="slider-wrapper">
-                <input type="range" min="0" max="1" step="0.01" bind:value={volume} />
+                <input aria-label="Volume Slider" type="range" min="0" max="1" step="0.01" bind:value={volume} />
             </div>
         </Hexagon>
 
         <Hexagon class="gap">
-            <button on:click={() => {filled = !filled}}>
+            <button aria-label="Fill Toggle" on:click={() => {filled = !filled}}>
                 {#if filled}
                     <i class="fas fa-star"></i>
                 {:else}
@@ -414,7 +414,7 @@
 
             </button>
             <div class="slider-wrapper">
-                <input type="range" min="2" max="16" step="1" bind:value={numSides} />
+                <input aria-label="Side Slider" type="range" min="2" max="16" step="1" bind:value={numSides} />
             </div>
             <button on:click={() => {mirrored = !mirrored}}>
                 {#if mirrored}
@@ -427,13 +427,13 @@
 
         <Hexagon class="gap">
             <div class="slider-wrapper">
-                <input type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:input={(e) => {updateFFTSize()}}/>
+                <input aria-label="FFT Size Slider" type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:input={(e) => {updateFFTSize()}}/>
             </div>
         </Hexagon>
 
         <button on:click={() => {fileInput && fileInput.click();}}>
             <Hexagon class="gap hexagon-hover">
-                <input type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
+                <input aria-label="File Selector" type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
                 <i class="fas fa-file-audio"></i>
             </Hexagon>
         </button>
