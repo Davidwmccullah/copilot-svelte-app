@@ -56,6 +56,10 @@
         currentTime = audio.currentTime;
     };
 
+    let updateFFTSize = (): void => {
+        fftSize = Math.pow(2, fftSizeExp);
+    };
+
     let lockSlider = (): void => {
         sliderLocked = true;
     };
@@ -421,7 +425,7 @@
             <div class="slider-wrapper">
                 <!-- values can must be 32 , 64 , 128 , 256 , 512 , 1024 , 2048 , 4096 , 8192 , 16384 , or 32768, alter the step to accomplish this -->
                 <!-- <input type="range" min="32" max="64" step="32" bind:value={fftSize} /> -->
-                <input type="range" min="5" max="15" step="1" bind:value={fftSizeExp} />
+                <input type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:change={(e) => {updateFFTSize}}/>
             </div>
         </Hexagon>
 
