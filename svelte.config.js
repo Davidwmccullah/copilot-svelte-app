@@ -23,14 +23,14 @@ import preprocess from 'svelte-preprocess';
 const config = {
     kit: {
         adapter: adapter(),
-        csp: {
-			directives: {
-				'script-src': ['self']
-			},
-			reportOnly: {
-				'script-src': ['self']
-			}
-		}
+        // csp: {
+		// 	directives: {
+		// 		'script-src': ['self']
+		// 	},
+		// 	reportOnly: {
+		// 		'script-src': ['self']
+		// 	}
+		// }
     },
     preprocess: preprocess()
 };
