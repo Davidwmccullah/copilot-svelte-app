@@ -7,7 +7,8 @@ import express from 'express';
 //   key: readFileSync('/etc/ssl/world-of-whimsy.key'),
 //   cert: readFileSync('/etc/ssl/world-of-whimsy.pem')
 // };
-
+// const HOST = '172.232.10.121';
+const PORT = 443;
 const app = express();
 
 // add a route that lives separately from the SvelteKit app
@@ -18,6 +19,6 @@ app.get('/healthcheck', (req, res) => {
 // let SvelteKit handle everything else, including serving prerendered pages and static assets
 app.use(handler);
 
-app.listen(3000, () => {
-	console.log('listening on port 3000');
+app.listen(PORT, () => {
+	console.log('listening on port ' + PORT);
 });
