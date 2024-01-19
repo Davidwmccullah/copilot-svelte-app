@@ -18,7 +18,8 @@
     let audio: HTMLAudioElement | null = null;
     let audioSrc: MediaElementAudioSourceNode | null = null;
     let analyser: AnalyserNode | null = null;
-    let fftSize: number = 2 * 2 * 4 * 4 * 4 * 4 * 4 * 4;
+    let fftSizeExp: number = 8;
+    let fftSize: number = Math.pow(2, fftSizeExp); // min is 32, max is 32768
     let dataArray: Uint8Array | null = null;
     let isPlaying: boolean = false;
     let animationFrameId: number = 0;
@@ -53,6 +54,18 @@
         if(sliderLocked || !audio) return;
         
         currentTime = audio.currentTime;
+    };
+
+    let updateFFTSize = (): void => {
+        if(!analyser) return;
+
+        fftSize = Math.pow(2, fftSizeExp);
+        
+        analyser.fftSize = fftSize;
+
+        const BUFFER_LEN = analyser.frequencyBinCount;
+
+        dataArray = new Uint8Array(BUFFER_LEN);
     };
 
     let lockSlider = (): void => {
@@ -150,11 +163,8 @@
 
         audioSrc.connect(analyser);
         analyser.connect(audioCtx.destination);
-        analyser.fftSize = fftSize;
 
-        const BUFFER_LEN = analyser.frequencyBinCount;
-
-        dataArray = new Uint8Array(BUFFER_LEN);
+        updateFFTSize();
 
         isInitialized = true;
     };
@@ -332,21 +342,21 @@
     {#if audio}
     <div class="controls">
         <div class="control-group">
-            <button on:click={() => {loopPlaylist(false);}}>
+            <button aria-label="Previous" on:click={() => {loopPlaylist(false);}}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         <i class="fas fa-undo"></i>
                     </strong>
                 </Hexagon>
             </button>
-            <button on:click={() => {updateTime(-5);}}>
+            <button aria-label="Rewind" on:click={() => {updateTime(-5);}}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         <i class="fas fa-backward-step"></i>
                     </strong>
                 </Hexagon>
             </button>
-            <button on:click={handlePlay}>
+            <button aria-label="Pause/Play" on:click={handlePlay}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         {#if isPlaying}
@@ -357,14 +367,14 @@
                     </strong>
                 </Hexagon>
             </button>
-            <button on:click={() => {updateTime(5);}}>
+            <button aria-label="Fast Forward" on:click={() => {updateTime(5);}}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         <i class="fas fa-forward-step"></i>
                     </strong>
                 </Hexagon>
             </button>
-            <button on:click={() => {loopPlaylist(true);}}>
+            <button aria-label="Next" on:click={() => {loopPlaylist(true);}}>
                 <Hexagon class="hexagon-hover" minWidth="7rem">
                     <strong>
                         <i class="fas fa-redo"></i>
@@ -377,12 +387,12 @@
             <span>{formatTime(currentTime)}&nbsp;/&nbsp;{formatTime(duration)}</span>
             
             <div class="slider-wrapper">
-                <input type="range" min="0" max={duration} bind:value={currentTime} on:input={() => {updateTime(0);}} on:mousedown={lockSlider} on:mouseup={unlockSlider}/>
+                <input aria-label="Time Slider" type="range" min="0" max={duration} bind:value={currentTime} on:input={() => {updateTime(0);}} on:mousedown={lockSlider} on:mouseup={unlockSlider}/>
             </div>
         </Hexagon>
         
         <Hexagon class="gap">
-            <button on:click={handleVolumeIconClick}>
+            <button aria-label="Volume Toggle" on:click={handleVolumeIconClick}>
                 {#if audio.muted}
                     <i class="fas fa-volume-mute"></i>
                 {:else}
@@ -390,12 +400,12 @@
                 {/if}
             </button>
             <div class="slider-wrapper">
-                <input type="range" min="0" max="1" step="0.01" bind:value={volume} />
+                <input aria-label="Volume Slider" type="range" min="0" max="1" step="0.01" bind:value={volume} />
             </div>
         </Hexagon>
 
         <Hexagon class="gap">
-            <button on:click={() => {filled = !filled}}>
+            <button aria-label="Fill Toggle" on:click={() => {filled = !filled}}>
                 {#if filled}
                     <i class="fas fa-star"></i>
                 {:else}
@@ -404,9 +414,9 @@
 
             </button>
             <div class="slider-wrapper">
-                <input type="range" min="2" max="16" step="1" bind:value={numSides} />
+                <input aria-label="Side Slider" type="range" min="2" max="16" step="1" bind:value={numSides} />
             </div>
-            <button on:click={() => {mirrored = !mirrored}}>
+            <button aria-label="Duplicate Sides" on:click={() => {mirrored = !mirrored}}>
                 {#if mirrored}
                     <i class="fas fa-circle"></i>
                 {:else}
@@ -415,8 +425,13 @@
             </button>
         </Hexagon>
 
-        <!-- select song from user input -->
-        <button on:click={() => {fileInput && fileInput.click();}}>
+        <Hexagon class="gap">
+            <div class="slider-wrapper">
+                <input aria-label="FFT Size Slider" type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:input={(e) => {updateFFTSize()}}/>
+            </div>
+        </Hexagon>
+
+        <button aria-label="File Selector" on:click={() => {fileInput && fileInput.click();}}>
             <Hexagon class="gap hexagon-hover">
                 <input type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
                 <i class="fas fa-file-audio"></i>
@@ -479,7 +494,7 @@
         background: var(--color-surface-200);
         padding: 0;
         max-height: 1rem;
-        clip-path: polygon(5% 0%, calc(100% - 5%) 0%, 100% 50%, calc(100% - 5%) 100%, 5% 100%, 0% 50%);
+        clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
         transition: 0.3s all;
     }
 
@@ -518,7 +533,7 @@
         background: var(--color-surface-200);
         padding: 0;
         max-height: 1rem;
-        clip-path: polygon(5% 0%, calc(100% - 5%) 0%, 100% 50%, calc(100% - 5%) 100%, 5% 100%, 0% 50%);
+        clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
         transition: 0.3s all;
     }
 </style>

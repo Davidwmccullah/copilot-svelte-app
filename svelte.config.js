@@ -14,15 +14,23 @@
 //         }),
 //     },
 //     preprocess: preprocess(),
-// };
-
-import adapter from '@sveltejs/adapter-auto';
+// };import { https } from 'https';
+import adapter from '@sveltejs/adapter-node';
 import preprocess from 'svelte-preprocess';
+
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     kit: {
-        adapter: adapter()
+        adapter: adapter(),
+        // csp: {
+		// 	directives: {
+		// 		'script-src': ['self']
+		// 	},
+		// 	reportOnly: {
+		// 		'script-src': ['self']
+		// 	}
+		// }
     },
     preprocess: preprocess()
 };

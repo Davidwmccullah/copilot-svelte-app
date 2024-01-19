@@ -13,7 +13,7 @@
 	<nav>
 		<ul>
 			{#each navItems as item}
-				<li><a class="hover-hex" target="_blank" href={item.href}><Hexagon class="hexagon-hover"><i class="{item.icon}"></i></Hexagon></a></li>
+				<li><a aria-label={item.label} class="hover-hex" target="_blank" href={item.href}><Hexagon class="hexagon-hover"><i class="{item.icon}"></i></Hexagon></a></li>
 			{/each}
 		</ul>
 	</nav>

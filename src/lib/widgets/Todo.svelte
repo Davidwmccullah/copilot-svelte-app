@@ -19,7 +19,7 @@
 <div class="todo-wrapper">
     <Hexagon>
         <input type="text" class="todo-field" bind:value={newTodo} placeholder="Enter a new todo" />
-        <button on:click={addTodo}>
+        <button aria-label="Add Todo" on:click={addTodo}>
             <Hexagon class="hexagon-hover" minWidth="7rem">
                 <strong>
                     <i class="fas fa-pen"></i>
@@ -36,7 +36,7 @@
             <li>
                 <Hexagon class="expand">
                 {todo}
-                <button on:click={() => removeTodo(index)}>
+                <button aria-label="Remove Todo" on:click={() => removeTodo(index)}>
                     <Hexagon class="hexagon-hover warn" style="">
                         <strong>
                             <i class="fas fa-trash"></i>
