@@ -415,7 +415,13 @@
             </button>
         </Hexagon>
 
-        <!-- select song from user input -->
+        <!-- Control the fft size with a slider -->
+        <Hexagon class="gap">
+            <div class="slider-wrapper">
+                <input type="range" min="32" max="32768" step="32" bind:value={fftSize} />
+            </div>
+        </Hexagon>
+        
         <button on:click={() => {fileInput && fileInput.click();}}>
             <Hexagon class="gap hexagon-hover">
                 <input type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
@@ -479,7 +485,7 @@
         background: var(--color-surface-200);
         padding: 0;
         max-height: 1rem;
-        clip-path: polygon(5% 0%, calc(100% - 5%) 0%, 100% 50%, calc(100% - 5%) 100%, 5% 100%, 0% 50%);
+        clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
         transition: 0.3s all;
     }
 
@@ -518,7 +524,7 @@
         background: var(--color-surface-200);
         padding: 0;
         max-height: 1rem;
-        clip-path: polygon(5% 0%, calc(100% - 5%) 0%, 100% 50%, calc(100% - 5%) 100%, 5% 100%, 0% 50%);
+        clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
         transition: 0.3s all;
     }
 </style>
