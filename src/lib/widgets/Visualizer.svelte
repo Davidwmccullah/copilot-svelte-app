@@ -57,7 +57,15 @@
     };
 
     let updateFFTSize = (): void => {
+        if(!analyser) return;
+
         fftSize = Math.pow(2, fftSizeExp);
+
+        analyser.fftSize = fftSize;
+
+        const BUFFER_LEN = analyser.frequencyBinCount;
+
+        dataArray = new Uint8Array(BUFFER_LEN);
     };
 
     let lockSlider = (): void => {
@@ -156,17 +164,13 @@
         audioSrc.connect(analyser);
         analyser.connect(audioCtx.destination);
 
+        updateFFTSize();
+
         isInitialized = true;
     };
 
     let playVisualizer = (): void => {
-        if (!canvas || !canvasCtx || !analyser) return;
-
-        analyser.fftSize = fftSize;
-
-        const BUFFER_LEN = analyser.frequencyBinCount;
-
-        dataArray = new Uint8Array(BUFFER_LEN);
+        if (!canvas || !canvasCtx || !analyser || !dataArray) return;
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
@@ -423,8 +427,6 @@
 
         <Hexagon class="gap">
             <div class="slider-wrapper">
-                <!-- values can must be 32 , 64 , 128 , 256 , 512 , 1024 , 2048 , 4096 , 8192 , 16384 , or 32768, alter the step to accomplish this -->
-                <!-- <input type="range" min="32" max="64" step="32" bind:value={fftSize} /> -->
                 <input type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:change={(e) => {updateFFTSize}}/>
             </div>
         </Hexagon>
