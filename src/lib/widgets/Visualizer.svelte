@@ -18,7 +18,7 @@
     let audio: HTMLAudioElement | null = null;
     let audioSrc: MediaElementAudioSourceNode | null = null;
     let analyser: AnalyserNode | null = null;
-    let fftSize: number = 2 * 2 * 4 * 4 * 4 * 4 * 4 * 4;
+    let fftSize: number = 32; // min is 32, max is 32768, must be a power of 2
     let dataArray: Uint8Array | null = null;
     let isPlaying: boolean = false;
     let animationFrameId: number = 0;
@@ -150,17 +150,18 @@
 
         audioSrc.connect(analyser);
         analyser.connect(audioCtx.destination);
-        analyser.fftSize = fftSize;
-
-        const BUFFER_LEN = analyser.frequencyBinCount;
-
-        dataArray = new Uint8Array(BUFFER_LEN);
 
         isInitialized = true;
     };
 
     let playVisualizer = (): void => {
-        if (!canvas || !canvasCtx || !analyser || !dataArray) return;
+        if (!canvas || !canvasCtx || !analyser) return;
+
+        analyser.fftSize = fftSize;
+
+        const BUFFER_LEN = analyser.frequencyBinCount;
+
+        dataArray = new Uint8Array(BUFFER_LEN);
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
@@ -415,13 +416,12 @@
             </button>
         </Hexagon>
 
-        <!-- Control the fft size with a slider -->
         <Hexagon class="gap">
             <div class="slider-wrapper">
                 <input type="range" min="32" max="32768" step="32" bind:value={fftSize} />
             </div>
         </Hexagon>
-        
+
         <button on:click={() => {fileInput && fileInput.click();}}>
             <Hexagon class="gap hexagon-hover">
                 <input type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
