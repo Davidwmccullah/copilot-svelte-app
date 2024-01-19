@@ -431,9 +431,9 @@
             </div>
         </Hexagon>
 
-        <button on:click={() => {fileInput && fileInput.click();}}>
+        <button aria-label="File Selector" on:click={() => {fileInput && fileInput.click();}}>
             <Hexagon class="gap hexagon-hover">
-                <input aria-label="File Selector" type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
+                <input type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
                 <i class="fas fa-file-audio"></i>
             </Hexagon>
         </button>
