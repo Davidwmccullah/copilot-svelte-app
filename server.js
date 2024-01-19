@@ -1,12 +1,12 @@
 import { handler } from './build/handler.js';
-import { https } from 'http';
+// import { https } from 'http';
 import { readFileSync } from 'fs';
 import express from 'express';
 
-const options = {
-  key: readFileSync('/etc/ssl/world-of-whimsy.key'),
-  cert: readFileSync('/etc/ssl/world-of-whimsy.pem')
-};
+// const options = {
+//   key: readFileSync('/etc/ssl/world-of-whimsy.key'),
+//   cert: readFileSync('/etc/ssl/world-of-whimsy.pem')
+// };
 
 const app = express();
 
