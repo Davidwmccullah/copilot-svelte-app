@@ -14,15 +14,23 @@
 //         }),
 //     },
 //     preprocess: preprocess(),
-// };
-
+// };import { https } from 'https';
+import { readFileSync } from 'fs';
 import adapter from '@sveltejs/adapter-node';
 import preprocess from 'svelte-preprocess';
+import https from 'https';
+
+const options = {
+    key: readFileSync('path/to/private-key.pem'),
+    cert: readFileSync('path/to/certificate.pem')
+  };
+  
+const createServer = (app) => https.createServer(options, app);
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
     kit: {
-        adapter: adapter()
+        adapter: adapter({ createServer })
     },
     preprocess: preprocess()
 };
