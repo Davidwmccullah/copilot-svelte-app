@@ -21,8 +21,8 @@ import preprocess from 'svelte-preprocess';
 import https from 'https';
 
 const options = {
-    key: readFileSync('path/to/private-key.pem'),
-    cert: readFileSync('path/to/certificate.pem')
+    key: readFileSync('/etc/ssl/world-of-whimsy.key'),
+    cert: readFileSync('/etc/ssl/world-of-whimsy.pem')
   };
   
 const createServer = (app) => https.createServer(options, app);
