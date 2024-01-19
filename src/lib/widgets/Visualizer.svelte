@@ -430,7 +430,7 @@
 
         <Hexagon class="gap">
             <div class="slider-wrapper">
-                <input type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:change={(e) => {updateFFTSize}}/>
+                <input type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:input={(e) => {updateFFTSize}}/>
             </div>
         </Hexagon>
 
