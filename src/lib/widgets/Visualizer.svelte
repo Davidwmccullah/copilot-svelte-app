@@ -61,6 +61,9 @@
 
         fftSize = Math.pow(2, fftSizeExp);
 
+        console.log(fftSize);
+        
+
         analyser.fftSize = fftSize;
 
         const BUFFER_LEN = analyser.frequencyBinCount;
