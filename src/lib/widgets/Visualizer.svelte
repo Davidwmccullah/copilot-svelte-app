@@ -392,7 +392,7 @@
         </Hexagon>
         
         <Hexagon class="gap">
-            <button on:click={handleVolumeIconClick}>
+            <button aria-label="Volume Toggle" on:click={handleVolumeIconClick}>
                 {#if audio.muted}
                     <i class="fas fa-volume-mute"></i>
                 {:else}
@@ -416,7 +416,7 @@
             <div class="slider-wrapper">
                 <input aria-label="Side Slider" type="range" min="2" max="16" step="1" bind:value={numSides} />
             </div>
-            <button on:click={() => {mirrored = !mirrored}}>
+            <button aria-label="Duplicate Sides" on:click={() => {mirrored = !mirrored}}>
                 {#if mirrored}
                     <i class="fas fa-circle"></i>
                 {:else}
