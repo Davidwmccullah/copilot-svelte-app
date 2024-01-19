@@ -1,7 +1,7 @@
 import { handler } from './build/handler.js';
 import { readFileSync } from 'fs';
 import express from 'express';
-const https = require('node:https');
+import https from 'https';
 
 const PORT = 443;
 
