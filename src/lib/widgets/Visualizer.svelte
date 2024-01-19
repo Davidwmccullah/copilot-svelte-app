@@ -418,7 +418,7 @@
 
         <Hexagon class="gap">
             <div class="slider-wrapper">
-                <input type="range" min="32" max="32768" step="32" bind:value={fftSize} />
+                <input type="range" min="32" max="64" step="32" bind:value={fftSize} />
             </div>
         </Hexagon>
 
