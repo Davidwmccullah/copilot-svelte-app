@@ -36,7 +36,7 @@
     let fileInput: HTMLInputElement | null = null;
 
     onMount((): void => {
-        // initAudio();
+        initAudio();
         // generateSoundData(10000, 1000);
         resizeCanvas();
     });
