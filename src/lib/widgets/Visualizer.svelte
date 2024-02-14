@@ -37,7 +37,6 @@
 
     onMount((): void => {
         initAudio();
-        // generateSoundData(10000, 1000);
         resizeCanvas();
     });
 
@@ -94,65 +93,6 @@
         audio.src = playlist[0];
         setSongTitle(audio.src);
     };
-
-    // Play a sound at 10000hz for 10 seconds
-    // let playSound = (frequency: number, duration: number): string => {
-    //     let audioCtx = new AudioContext();
-    //     let oscillator = audioCtx.createOscillator();
-    //     let gainNode = audioCtx.createGain();
-
-    //     oscillator.connect(gainNode);
-    //     gainNode.connect(audioCtx.destination);
-
-    //     gainNode.gain.value = 0.1;
-    //     oscillator.frequency.value = frequency;
-    //     oscillator.type = "sine";
-
-    //     oscillator.start();
-
-    //     setTimeout(() => {
-    //         oscillator.stop();
-    //     }, duration * 1000);
-
-    //     return oscillator.frequency.value.toString();
-    // };
-
-    let generateSoundData = (frequency: number, duration: number, sampleRate: number = 44100): Float32Array => {
-        const sampleCount = Math.floor(duration / 1000 * sampleRate);
-        const buffer = new Float32Array(sampleCount);
-        const angularFrequency = 2 * Math.PI * frequency;
-
-        for (let i = 0; i < sampleCount; i++) {
-            buffer[i] = Math.sin(angularFrequency * i / sampleRate);
-        }
-
-        return buffer;
-    }
-
-    let initSoundData = (soundData: Float32Array, sampleRate: number = 44100): void => {
-        if (!canvas || !audio) return;
-
-        canvasCtx = canvas.getContext("2d");
-        
-        let audioCtx = new AudioContext();
-
-        let audioBuffer = audioCtx.createBuffer(1, soundData.length, sampleRate);
-        audioBuffer.getChannelData(0).set(soundData);
-
-        audioSrc = audioCtx.createBufferSource();
-        audioSrc.buffer = audioBuffer;
-        
-        analyser = audioCtx.createAnalyser();
-
-        audioSrc.connect(analyser);
-        analyser.connect(audioCtx.destination);
-
-        updateFFTSize();
-
-        isInitialized = true;
-
-        console.log(audioSrc);
-    }
 
     let initCustomAudio = (src: string): void => {
         if (!audio || !fileInput) return;
@@ -321,8 +261,7 @@
             cancelAnimationFrame(animationFrameId);
         } else {
             if (!isInitialized) {
-                // initVisualizer();
-                initSoundData(generateSoundData(10000, 1000));
+                initVisualizer();
             }
 
             audio.play();
