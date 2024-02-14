@@ -89,9 +89,34 @@
     let initAudio = (): void => {
         if (!audio) return;
 
-        shufflePlaylist(playlist);
-        audio.src = playlist[0];
+        // shufflePlaylist(playlist);
+        // audio.src = playlist[0];
+        // setSongTitle(audio.src);
+
+        audio.src = playSound(10000, 10);
         setSongTitle(audio.src);
+    };
+
+    // Play a sound at 10000hz for 10 seconds
+    let playSound = (frequency: number, duration: number): string => {
+        let audioCtx = new AudioContext();
+        let oscillator = audioCtx.createOscillator();
+        let gainNode = audioCtx.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        gainNode.gain.value = 0.1;
+        oscillator.frequency.value = frequency;
+        oscillator.type = "sine";
+
+        oscillator.start();
+
+        setTimeout(() => {
+            oscillator.stop();
+        }, duration * 1000);
+
+        return oscillator.frequency.value.toString();
     };
 
     let initCustomAudio = (src: string): void => {
