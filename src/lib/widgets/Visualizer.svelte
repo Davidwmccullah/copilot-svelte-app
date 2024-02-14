@@ -150,6 +150,8 @@
         updateFFTSize();
 
         isInitialized = true;
+
+        console.log(audioSrc);
     }
 
     let initCustomAudio = (src: string): void => {
