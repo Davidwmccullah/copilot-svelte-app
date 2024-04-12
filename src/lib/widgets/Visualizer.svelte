@@ -43,6 +43,8 @@
     let sampleRate: number = 44100;
     let bands: {startIndex: number, endIndex: number}[] = [];
     let selectedDataArray: Uint8Array = new Uint8Array(0);
+    let rotationPosition: number = 0;
+    let rotationSpeed: number = 0.1;
 
     onMount((): void => {
         initAudio();
@@ -218,6 +220,7 @@
 
         // drawRectangles(data);
         drawRegularPolygon(data);
+        rotationPosition += rotationSpeed;
 
         animationFrameId = requestAnimationFrame(function () {
             playVisualizer();
@@ -343,7 +346,9 @@
                     canvasCtx.save();
 
                     canvasCtx.translate(canvas.width / 2, canvas.height / 2);
-                    canvasCtx.rotate(toRadians(rotation));
+                    canvasCtx.rotate(toRadians(rotation)); // Adjust the rotation speed here
+                    canvasCtx.rotate(toRadians(rotationPosition * iteration));
+
 
                     // if(!filled && !mirrored && i === 0) {
                     //     canvasCtx.lineTo(0, radius + (data[data.length - 1] / 255) * (Math.min(canvas.height, canvas.width) / 2 - radius) - canvasCtx.lineWidth);
@@ -513,7 +518,6 @@
                 {:else}
                     <i class="far fa-star"></i>
                 {/if}
-
             </button>
             <div class="slider-wrapper">
                 <input aria-label="Side Slider" type="range" min="2" max="16" step="1" bind:value={numSides} />
@@ -528,15 +532,25 @@
         </Hexagon>
 
         <Hexagon class="gap">
+            <i class="fas fa-chart-bar"></i>
             <div class="slider-wrapper">
                 <input aria-label="FFT Size Slider" type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:input={(e) => {updateFFTSize()}}/>
             </div>
         </Hexagon>
 
         <Hexagon class="gap">
+            <i class="fas fa-chart-line"></i>
             <div class="slider-wrapper">
                 <input aria-label="Smoothing Slider" type="range" min="0.01" max="0.1" step="0.01" bind:value={smoothStrength} />
             </div>
+        </Hexagon>
+
+        <Hexagon class="gap">
+            <i class="fas fa-sync"></i>
+            <div class="slider-wrapper">
+                <input aria-label="Rotation Speed Slider" type="range" min="0" max="1" step="0.01" bind:value={rotationSpeed} />
+                
+            </div> 
         </Hexagon>
 
         <button aria-label="File Selector" on:click={() => {fileInput && fileInput.click();}}>
