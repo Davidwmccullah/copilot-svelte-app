@@ -185,15 +185,42 @@
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
       
-        // let data: Uint8Array = dataArray;
-        let data: Uint8Array = applyBassRollOff(dataArray);
+        let data: Uint8Array = dataArray;
+        // let data: Uint8Array = applyBassRollOff(dataArray);
         // let data: Uint8Array = data.map((x) => {return 255});
 
-        drawRectangles(data);
+        drawRectangles2(data);
 
         animationFrameId = requestAnimationFrame(function () {
             playVisualizer();
         });
+    };
+
+    let drawRectangles2 = (data: Uint8Array): void => {
+        if (!canvas || !canvasCtx) return;
+
+        let width = canvas.width;
+        let height = canvas.height;
+        let barWidth = width / data.length;
+        let centerX = width / 2;
+        let centerY = height / 2;
+
+        canvasCtx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < data.length; i++) {
+            let value = data[i];
+            let percent = value / 255;
+            let barHeight = height * percent;
+
+            // Calculate the x position. Lower frequencies are drawn in the center, higher frequencies towards the edges.
+            let x = (i < data.length / 2) ? centerX - (barWidth * (data.length / 2 - i)) : centerX + (barWidth * (i - data.length / 2));
+
+            // Calculate the y position. Lower frequencies are drawn higher, higher frequencies are drawn lower.
+            let y = centerY - (barHeight / 2);
+
+            canvasCtx.fillStyle = 'rgb(' + (percent * 255) + ', 50, 50)';
+            canvasCtx.fillRect(x, y, barWidth, barHeight);
+        }
     };
 
     let drawRectangles = (data: Uint8Array): void => {
