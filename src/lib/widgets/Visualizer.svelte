@@ -44,7 +44,7 @@
     let bands: {startIndex: number, endIndex: number}[] = [];
     let selectedDataArray: Uint8Array = new Uint8Array(0);
     let rotationPosition: number = 0;
-    let rotationSpeed: number = 0.1;
+    let rotationSpeed: number = 0;
 
     onMount((): void => {
         initAudio();
@@ -339,7 +339,7 @@
                 }
 
                 for (var i = 0; i < data.length; i++) {
-                    let height: number = ((data[i]) / 255) * (Math.min((canvas.height / 2, canvas.width / 2)) - radius);
+                    let height: number = ((data[i]) / 255) * (Math.min((canvas.height / 2, canvas.width / 2)) - radius)
                     let rotation: number = (360 * ((i / (data.length - 1) * iteration) + side) / numSides);
                     let percent = data[i] / 255;
 
@@ -490,75 +490,79 @@
             </button>
         </div>
 
-        <Hexagon class="gap">
-            <span>{formatTime(currentTime)}&nbsp;/&nbsp;{formatTime(duration)}</span>
-            
-            <div class="slider-wrapper">
-                <input aria-label="Time Slider" type="range" min="0" max={duration} bind:value={currentTime} on:input={() => {updateTime(0);}} on:mousedown={lockSlider} on:mouseup={unlockSlider}/>
-            </div>
-        </Hexagon>
-        
-        <Hexagon class="gap">
-            <button aria-label="Volume Toggle" on:click={handleVolumeIconClick}>
-                {#if audio.muted}
-                    <i class="fas fa-volume-mute"></i>
-                {:else}
-                    <i class="fas fa-volume-up"></i>
-                {/if}
-            </button>
-            <div class="slider-wrapper">
-                <input aria-label="Volume Slider" type="range" min="0" max="1" step="0.01" bind:value={volume} />
-            </div>
-        </Hexagon>
-
-        <Hexagon class="gap">
-            <button aria-label="Fill Toggle" on:click={() => {filled = !filled}}>
-                {#if filled}
-                    <i class="fas fa-star"></i>
-                {:else}
-                    <i class="far fa-star"></i>
-                {/if}
-            </button>
-            <div class="slider-wrapper">
-                <input aria-label="Side Slider" type="range" min="2" max="16" step="1" bind:value={numSides} />
-            </div>
-            <button aria-label="Duplicate Sides" on:click={() => {mirrored = !mirrored}}>
-                {#if mirrored}
-                    <i class="fas fa-circle"></i>
-                {:else}
-                    <i class="fas fa-circle-half-stroke"></i>
-                {/if}
-            </button>
-        </Hexagon>
-
-        <Hexagon class="gap">
-            <i class="fas fa-chart-bar"></i>
-            <div class="slider-wrapper">
-                <input aria-label="FFT Size Slider" type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:input={(e) => {updateFFTSize()}}/>
-            </div>
-        </Hexagon>
-
-        <Hexagon class="gap">
-            <i class="fas fa-chart-line"></i>
-            <div class="slider-wrapper">
-                <input aria-label="Smoothing Slider" type="range" min="0.01" max="0.1" step="0.01" bind:value={smoothStrength} />
-            </div>
-        </Hexagon>
-
-        <Hexagon class="gap">
-            <i class="fas fa-sync"></i>
-            <div class="slider-wrapper">
-                <input aria-label="Rotation Speed Slider" type="range" min="0" max="1" step="0.01" bind:value={rotationSpeed} />
+        <div class="control-group">
+            <Hexagon class="gap">
+                <span>{formatTime(currentTime)}&nbsp;/&nbsp;{formatTime(duration)}</span>
                 
-            </div> 
-        </Hexagon>
-
-        <button aria-label="File Selector" on:click={() => {fileInput && fileInput.click();}}>
-            <Hexagon class="gap hexagon-hover">
-                <input type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
-                <i class="fas fa-file-audio"></i>
+                <div class="slider-wrapper">
+                    <input aria-label="Time Slider" type="range" min="0" max={duration} bind:value={currentTime} on:input={() => {updateTime(0);}} on:mousedown={lockSlider} on:mouseup={unlockSlider}/>
+                </div>
             </Hexagon>
-        </button>
+            
+            <Hexagon class="gap">
+                <button aria-label="Volume Toggle" on:click={handleVolumeIconClick}>
+                    {#if audio.muted}
+                        <i class="fas fa-volume-mute"></i>
+                    {:else}
+                        <i class="fas fa-volume-up"></i>
+                    {/if}
+                </button>
+                <div class="slider-wrapper">
+                    <input aria-label="Volume Slider" type="range" min="0" max="1" step="0.01" bind:value={volume} />
+                </div>
+            </Hexagon>
+
+            <Hexagon class="gap">
+                <button aria-label="Fill Toggle" on:click={() => {filled = !filled}}>
+                    {#if filled}
+                        <i class="fas fa-star"></i>
+                    {:else}
+                        <i class="far fa-star"></i>
+                    {/if}
+                </button>
+                <div class="slider-wrapper">
+                    <input aria-label="Side Slider" type="range" min="2" max="16" step="1" bind:value={numSides} />
+                </div>
+                <button aria-label="Duplicate Sides" on:click={() => {mirrored = !mirrored}}>
+                    {#if mirrored}
+                        <i class="fas fa-circle"></i>
+                    {:else}
+                        <i class="fas fa-circle-half-stroke"></i>
+                    {/if}
+                </button>
+            </Hexagon>
+
+            <Hexagon class="gap">
+                <i class="fas fa-chart-bar"></i>
+                <div class="slider-wrapper">
+                    <input aria-label="FFT Size Slider" type="range" min="5" max="15" step="1" bind:value={fftSizeExp} on:input={(e) => {updateFFTSize()}}/>
+                </div>
+            </Hexagon>
+
+            <Hexagon class="gap">
+                <i class="fas fa-chart-line"></i>
+                <div class="slider-wrapper">
+                    <input aria-label="Smoothing Slider" type="range" min="0.01" max="0.1" step="0.01" bind:value={smoothStrength} />
+                </div>
+            </Hexagon>
+
+            <Hexagon class="gap">
+                <i class="fas fa-sync"></i>
+                <div class="slider-wrapper">
+                    <input aria-label="Rotation Speed Slider" type="range" min="0" max="1" step="0.01" bind:value={rotationSpeed} />
+                    
+                </div> 
+            </Hexagon>
+        </div>
+
+        <div class="control-group">
+            <button aria-label="File Selector" on:click={() => {fileInput && fileInput.click();}}>
+                <Hexagon class="gap hexagon-hover">
+                    <input type="file" accept="audio/*" on:change={(e) => {if (e.target instanceof HTMLInputElement && e.target.files !== null) {initCustomAudio(URL.createObjectURL(e.target.files[0]));}}} bind:this={fileInput} style="display: none;" />
+                    <i class="fas fa-file-audio"></i>
+                </Hexagon>
+            </button>
+        </div>
     </div>
     {/if}
 </div>
@@ -604,7 +608,9 @@
     .control-group {
         display: flex;
         flex-direction: row;
+        justify-content: center;
         gap: 0.5rem;
+        flex-wrap: wrap;
     }
     
     .slider-wrapper {
