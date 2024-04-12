@@ -6,10 +6,12 @@
     import Hexagon from "$lib/shapes/Hexagon.svelte";
 
     let playlist: string[] = [
-        "audio/K3NZH - Still 50 Cent.m4a",
+        // "audio/K3NZH - Still 50 Cent.m4a",
         // "audio/Mechanicus OST.m4a",
         // "audio/Mehdibh - Sekiro.wav",
         // "audio/Darktide - Waiting to Strike + Imperial Strike.m4a",
+        "Crypto & Jake Daniels - Hayloft.mp3",
+        "TRAILS - DEAD.mp3"
     ]
 
     let visualizerWrapper: HTMLDivElement | null = null;
