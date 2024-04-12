@@ -6,12 +6,15 @@
     import Hexagon from "$lib/shapes/Hexagon.svelte";
 
     let playlist: string[] = [
-        // "audio/K3NZH - Still 50 Cent.m4a",
+        "audio/K3NZH - Still 50 Cent.m4a",
         // "audio/Mechanicus OST.m4a",
-        // "audio/Mehdibh - Sekiro.wav",
+        "audio/Mehdibh - Sekiro.wav",
         // "audio/Darktide - Waiting to Strike + Imperial Strike.m4a",
-        "audio/Crypto & Jake Daniels - Hayloft.mp3",
-        "audio/TRAILS - DEAD.mp3"
+        "audio/Crypto & Jake Daniels - Hayloft.wav",
+        "audio/TRAILS - DEAD.mp3",
+        "audio/Jake Daniels - Stalker.wav",
+        "audio/Layto x Neoni - Ghost Town.wav",
+        "audio/Neoni - WONDERLAND.wav",
     ]
 
     let visualizerWrapper: HTMLDivElement | null = null;
@@ -20,7 +23,7 @@
     let audio: HTMLAudioElement | null = null;
     let audioSrc: any = null;
     let analyser: AnalyserNode | null = null;
-    let fftSizeExp: number = 10; // min is 5, max is 15
+    let fftSizeExp: number = 11; // min is 5, max is 15
     let fftSize: number = Math.pow(2, fftSizeExp); // min is 32, max is 32768
     let dataArray: Uint8Array | null = null;
     let isPlaying: boolean = false;
@@ -33,12 +36,13 @@
     let currentSongIndex: number = 0;
     let songTitle: string = 'No Song Selected';
     let numSides: number = 6;
-    let filled = false;
+    let filled = true;
     let mirrored = true;
     let fileInput: HTMLInputElement | null = null;
     let smoothStrength: number = .1;
-    let logCutoff: number = 1;
     let sampleRate: number = 44100;
+    let bands: {startIndex: number, endIndex: number}[] = [];
+    let selectedDataArray: Uint8Array = new Uint8Array(0);
 
     onMount((): void => {
         initAudio();
@@ -71,6 +75,19 @@
         const BUFFER_LEN = analyser.frequencyBinCount;
 
         dataArray = new Uint8Array(BUFFER_LEN);
+
+        bands = [
+            // {start: 20, end: 60},   // Sub-bass
+            {start: 20, end: 250},  // Sub-bass + Bass
+            {start: 250, end: 500}, // Low Midrange
+            {start: 500, end: 2000}, // Midrange
+            {start: 2000, end: 4000}, // Upper Midrange
+            {start: 4000, end: 6000}, // Presence
+            {start: 6000, end: 20000} // Brilliance
+        ].map(band => ({
+            startIndex: Math.round(band.start * (fftSize / sampleRate)),
+            endIndex: Math.round(band.end * (fftSize / sampleRate))
+        }));
     };
 
     let lockSlider = (): void => {
@@ -181,35 +198,23 @@
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
-      
-        // let data: Uint8Array = dataArray;
-        // Calculate the index range for each frequency band
-        let bands = [
-            {start: 20, end: 60},   // Sub-bass
-            {start: 60, end: 250},  // Bass
-            {start: 250, end: 500}, // Low Midrange
-            {start: 500, end: 2000}, // Midrange
-            {start: 2000, end: 4000}, // Upper Midrange
-            {start: 4000, end: 6000}, // Presence
-            {start: 6000, end: 20000} // Brilliance
-        ].map(band => ({
-            startIndex: Math.round(band.start * (fftSize / sampleRate)),
-            endIndex: Math.round(band.end * (fftSize / sampleRate))
-        }));
 
-        // get an equal distribution of each set of bands and stitch the arrays together
-        let selectedDataArray = new Uint8Array(bands.reduce((acc, band) => acc + (band.endIndex - band.startIndex), 0));
+        let indexCount = bands[0].endIndex - bands[0].startIndex;
+        selectedDataArray = new Uint8Array(indexCount * bands.length);
 
-        let offset = 0;
-        for (let band of bands) {
-            for (let i = band.startIndex; i < band.endIndex; i++) {
-                selectedDataArray[offset] = dataArray[i];
-                offset++;
+        for (let i = 0; i < bands.length; i++) {
+            let band = bands[i];
+            let bandData = dataArray.slice(band.startIndex, band.endIndex);
+            let bandAverage = bandData.reduce((a, b) => a + b, 0) / bandData.length;
+
+            for (let j = 0; j < indexCount; j++) {
+            selectedDataArray[i * indexCount + j] = bandData[j];
             }
         }
 
+
         let data: Uint8Array = lowessSmooth(new Uint8Array(selectedDataArray), smoothStrength);
-            // let data: Uint8Array = dataArray.map((x) => {return 255});
+        // let fullDataArray: Uint8Array = selectedDataArray.map((x) => {return 255});
 
         // drawRectangles(data);
         drawRegularPolygon(data);
@@ -265,7 +270,35 @@
             let x = barWidth * i;
             let y = height - height * percent;
 
-            canvasCtx.fillStyle = 'rgb(' + (percent * 255) + ', 50, 50)';
+            // color the bars based on their bands set, use a different color for each set
+            let bandIndex = Math.floor(i / (data.length / bands.length));
+            switch (bandIndex) {
+                case 0:
+                    canvasCtx.fillStyle = Colors.teal[1800];
+                    break;
+                case 1:
+                    canvasCtx.fillStyle = Colors.teal[1600];
+                    break;
+                case 2:
+                    canvasCtx.fillStyle = Colors.teal[1400];
+                    break;
+                case 3:
+                    canvasCtx.fillStyle = Colors.teal[1200];
+                    break;
+                case 4:
+                    canvasCtx.fillStyle = Colors.teal[1000];
+                    break;
+                case 5:
+                    canvasCtx.fillStyle = Colors.teal[800];
+                    break;
+                case 6:
+                    canvasCtx.fillStyle = Colors.teal[600];
+                    break;
+                default:
+                    canvasCtx.fillStyle = Colors.grey[500];
+                    break;
+            }
+
 
             canvasCtx.fillRect(x, y, barWidth, barHeight);
         }
@@ -318,28 +351,38 @@
 
                     const percentage = 0.75;
 
-                    let startColor = Colors.primary[100].replace('#', '');
-                    let endColor = Colors.red[500].replace('#', '');
+                    let bandIndex = Math.floor(i / (data.length / bands.length));
+                    let getColorForStrength = (value: number, bandIndex: number): string => {
+                        let percent = value / 255;
+                        let startColor = Colors.teal[600].replace('#', '');
+                        let endColor = Colors.teal[1800].replace('#', '');
 
-                    let startRGB = {
-                        r: parseInt(startColor.slice(0, 2), 16),
-                        g: parseInt(startColor.slice(2, 4), 16),
-                        b: parseInt(startColor.slice(4, 6), 16)
+                        let startRGB = {
+                            r: parseInt(startColor.slice(0, 2), 16),
+                            g: parseInt(startColor.slice(2, 4), 16),
+                            b: parseInt(startColor.slice(4, 6), 16)
+                        };
+
+                        let endRGB = {
+                            r: parseInt(endColor.slice(0, 2), 16),
+                            g: parseInt(endColor.slice(2, 4), 16),
+                            b: parseInt(endColor.slice(4, 6), 16)
+                        };
+
+                        let interpolatedRGB = {
+                            r: Math.round(startRGB.r + percent * (endRGB.r - startRGB.r)),
+                            g: Math.round(startRGB.g + percent * (endRGB.g - startRGB.g)),
+                            b: Math.round(startRGB.b + percent * (endRGB.b - startRGB.b))
+                        };
+
+                        interpolatedRGB.r += bandIndex * 10;
+                        interpolatedRGB.g += bandIndex * 10;
+                        interpolatedRGB.b += bandIndex * 10;
+
+                        return `rgb(${interpolatedRGB.r}, ${interpolatedRGB.g}, ${interpolatedRGB.b})`;
                     };
 
-                    let endRGB = {
-                        r: parseInt(endColor.slice(0, 2), 16),
-                        g: parseInt(endColor.slice(2, 4), 16),
-                        b: parseInt(endColor.slice(4, 6), 16)
-                    };
-
-                    let interpolatedRGB = {
-                        r: Math.round(startRGB.r + percent * (endRGB.r - startRGB.r)),
-                        g: Math.round(startRGB.g + percent * (endRGB.g - startRGB.g)),
-                        b: Math.round(startRGB.b + percent * (endRGB.b - startRGB.b))
-                    };
-
-                    canvasCtx.fillStyle = `rgb(${interpolatedRGB.r}, ${interpolatedRGB.g}, ${interpolatedRGB.b})`;
+                    canvasCtx.fillStyle = getColorForStrength(data[i], bandIndex);
 
                     if (filled) {
                         canvasCtx.fillRect(-canvasCtx.lineWidth / 2, (radius - (height * percentage)) / percentage, canvasCtx.lineWidth, (height - (height * percentage)) / percentage);
