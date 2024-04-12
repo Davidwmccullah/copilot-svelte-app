@@ -549,7 +549,7 @@
             <Hexagon class="gap">
                 <i class="fas fa-sync"></i>
                 <div class="slider-wrapper">
-                    <input aria-label="Rotation Speed Slider" type="range" min="0" max="1" step="0.01" bind:value={rotationSpeed} />
+                    <input aria-label="Rotation Speed Slider" type="range" min="-1" max="1" step="0.01" bind:value={rotationSpeed} />
                     
                 </div> 
             </Hexagon>
