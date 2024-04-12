@@ -33,7 +33,7 @@
     let currentSongIndex: number = 0;
     let songTitle: string = 'No Song Selected';
     let numSides: number = 6;
-    let filled = true;
+    let filled = false;
     let mirrored = true;
     let fileInput: HTMLInputElement | null = null;
     let smoothStrength: number = .1;
