@@ -10,8 +10,8 @@
         // "audio/Mechanicus OST.m4a",
         // "audio/Mehdibh - Sekiro.wav",
         // "audio/Darktide - Waiting to Strike + Imperial Strike.m4a",
-        "Crypto & Jake Daniels - Hayloft.mp3",
-        "TRAILS - DEAD.mp3"
+        "audio/Crypto & Jake Daniels - Hayloft.mp3",
+        "audio/TRAILS - DEAD.mp3"
     ]
 
     let visualizerWrapper: HTMLDivElement | null = null;
