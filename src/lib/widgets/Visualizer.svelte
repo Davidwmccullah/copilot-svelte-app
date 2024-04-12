@@ -23,7 +23,7 @@
     let audio: HTMLAudioElement | null = null;
     let audioSrc: any = null;
     let analyser: AnalyserNode | null = null;
-    let fftSizeExp: number = 11; // min is 5, max is 15
+    let fftSizeExp: number = 12; // min is 5, max is 15
     let fftSize: number = Math.pow(2, fftSizeExp); // min is 32, max is 32768
     let dataArray: Uint8Array | null = null;
     let isPlaying: boolean = false;
