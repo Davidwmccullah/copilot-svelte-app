@@ -169,56 +169,16 @@
         isInitialized = true;
     };
 
-    let smooth_data2 = (data: Uint8Array, strength: number): Uint8Array => {
-    if(!data || !strength) return(data);
-    if (strength < 1) {
-        return data;
-    }
-    if (strength > data.length) {
-        strength = data.length;
-    }
-    let smoothedData: number[] = [];
-    let length: number = data.length;
-    for (let i = 0; i < length; i++) {
-        let sum: number = data[i] * 2; // Double the weight of the current frequency
-        let count: number = 2; // Start count at 2 because we've added the current frequency twice
-        let num_neighbors: number = Math.floor(strength / 2);
-        let startIndex: number = Math.max(0, i - num_neighbors);
-        let endIndex: number = Math.min(length - 1, i + num_neighbors);
-        for (let j = startIndex; j <= endIndex; j++) {
-            if (j !== i) { 
-                sum += data[j];
-                count++;
-            }
-        }
-        smoothedData.push(sum / count);
-    }
-    return Uint8Array.from(smoothedData);
-}
-
-let sample2 = (data: Uint8Array, n: number): Uint8Array => {
-    let result: number[] = [];
-    let step = Math.floor(data.length / n);
-    for (let i = 0; i < data.length; i += step) {
-        let sum = 0;
-        for (let j = i; j < i + step; j++) {
-            sum += data[j];
-        }
-        result.push(sum / step);
-    }
-    return Uint8Array.from(result);
-}
-
     let playVisualizer = (): void => {
         if (!canvas || !canvasCtx || !analyser || !dataArray) return;
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
       
-        // let data: Uint8Array = dataArray;
+        let data: Uint8Array = dataArray;
 
-        let data: Uint8Array = smooth_data2(dataArray, 10);
-        data = sample2(data, 64);
+        // let data: Uint8Array = smooth_data2(dataArray, 10);
+        // data = sample2(data, 64);
 
         // let data: Uint8Array = data.map((x) => {return 255});
 
