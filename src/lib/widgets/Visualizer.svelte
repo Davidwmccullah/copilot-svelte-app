@@ -169,17 +169,24 @@
         isInitialized = true;
     };
 
+    function applyBassRollOff(dataArray) {
+        let filteredData = new Uint8Array(dataArray.length);
+        let alpha = 0.8; // This value can be adjusted to control the amount of smoothing
+        filteredData[0] = dataArray[0];
+        for (let i = 1; i < dataArray.length; i++) {
+            filteredData[i] = alpha * dataArray[i] + (1 - alpha) * filteredData[i - 1];
+        }
+        return filteredData;
+    }
+
     let playVisualizer = (): void => {
         if (!canvas || !canvasCtx || !analyser || !dataArray) return;
 
         canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         analyser.getByteFrequencyData(dataArray);
       
-        let data: Uint8Array = dataArray;
-
-        // let data: Uint8Array = smooth_data2(dataArray, 10);
-        // data = sample2(data, 64);
-
+        // let data: Uint8Array = dataArray;
+        let data: Uint8Array = applyBassRollOff(dataArray);
         // let data: Uint8Array = data.map((x) => {return 255});
 
         drawRectangles(data);
@@ -280,53 +287,6 @@
         
         audio.muted = !audio.muted;
     };
-
-    let smooth_data = (data: Uint8Array, strength: number): Uint8Array => {
-        if(!data || !strength) return(data);
-
-        if (strength < 1) {
-            return data;
-        }
-
-        if (strength > data.length) {
-            strength = data.length;
-        }
-
-        let smoothedData: number[] = [];
-        let length: number = data.length;
-
-        for (let i = 0; i < length; i++) {
-            let sum: number = data[i];
-            let count: number = 1;
-
-            let num_neighbors: number = Math.floor(strength / 2);
-            let startIndex: number = Math.max(0, i - num_neighbors);
-            let endIndex: number = Math.min(length - 1, i + num_neighbors);
-
-            for (let j = startIndex; j <= endIndex; j++) {
-                if (j !== i) { 
-                    sum += data[j];
-                    count++;
-                }
-            }
-
-            let average: number = sum / count;
-            smoothedData.push(average);
-        }
-
-        return Uint8Array.from(smoothedData);
-    }
-
-    let sample = (data: Uint8Array, n: number): Uint8Array => {
-        let result: number[] = [];
-
-        for (let i = 0; i < n; i++) {
-            let index: number = Math.floor(i * data.length / n);
-            result.push(data[index]);
-        }
-
-        return Uint8Array.from(result);
-    }
 </script>
 
 <div class="content-wrapper">
