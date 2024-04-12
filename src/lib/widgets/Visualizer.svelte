@@ -339,9 +339,9 @@
                 }
 
                 for (var i = 0; i < data.length; i++) {
-                    let height: number = ((data[i]) / data.length) * (Math.min((canvas.height / 2, canvas.width / 2)) - radius)
+                    let height: number = ((data[i]) / 255) * (Math.min((canvas.height / 2, canvas.width / 2)) - radius)
                     let rotation: number = (360 * ((i / (data.length - 1) * iteration) + side) / numSides);
-                    let percent = data[i] / data.length;
+                    let percent = data[i] / 255;
 
                     canvasCtx.save();
 
@@ -358,7 +358,7 @@
 
                     let bandIndex = Math.floor(i / (data.length / bands.length));
                     let getColorForStrength = (value: number, bandIndex: number): string => {
-                        let percent = value / data.length;
+                        let percent = value / 255;
                         let startColor = Colors.teal[600].replace('#', '');
                         let endColor = Colors.teal[1800].replace('#', '');
 
