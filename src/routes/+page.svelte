@@ -11,21 +11,21 @@
 </script>
 
 <div class="home-wrapper">
-	<Card title ="Clock" style="grid-area: clk">
+	<!-- <Card title ="Clock" style="grid-area: clk">
 		<Clock />
 	</Card>
 	<Card title ="Message of the Day" style="grid-area: mtd">
 		<Motd />
-	</Card>
+	</Card> -->
 	<Card title="Visualizer" style="grid-area: vis">
 		<Visualizer />
 	</Card>
-	<Card title ="To Do" style="grid-area: tdo">
+	<!-- <Card title ="To Do" style="grid-area: tdo">
 		<Todo />
 	</Card>
 	<Card title ="To Do" style="grid-area: tdo">
 		<Todo />
-	</Card>
+	</Card> -->
 
 </div>
 
@@ -40,11 +40,11 @@
 		display: grid;
 		grid-gap: 1rem;
 		grid-template-areas:
-			"mtd mtd mtd mtd clk "
+			/* "mtd mtd mtd mtd clk "
 			"vis vis vis tdo tdo "
 			"vis vis vis tdo tdo "
-			"vis vis vis tdo tdo " ;
-			/* "vis"; */
+			"vis vis vis tdo tdo " ; */
+			"vis";
 	}
 
 	@media (max-width: 48rem) {

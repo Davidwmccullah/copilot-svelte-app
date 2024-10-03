@@ -29,6 +29,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
     padding: 0.5rem 1rem;
     background: var(--color-surfaceMixed-400);
     transition: all 0.3s;
