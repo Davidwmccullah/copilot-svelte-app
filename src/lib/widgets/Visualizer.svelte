@@ -383,7 +383,7 @@
         </div>
 
         <div class="control-group">
-            <Hexagon class="gap">
+            <Hexagon class="gap icon-hover">
                 <span>{formatTime(currentTime)}&nbsp;/&nbsp;{formatTime(duration)}</span>
                 
                 <div class="slider-wrapper">
@@ -395,9 +395,9 @@
             <Hexagon class="gap">
                 <button aria-label="Volume Toggle" on:click={handleVolumeIconClick}>
                     {#if audio.muted}
-                        <i class="fas fa-volume-mute"></i>
+                        <i class="icon-hover fas fa-volume-mute"></i>
                     {:else}
-                        <i class="fas fa-volume-up"></i>
+                        <i class="icon-hover fas fa-volume-up"></i>
                     {/if}
                 </button>
                 <div class="slider-wrapper">
@@ -410,9 +410,9 @@
             <Hexagon class="gap">
                 <button aria-label="Fill Toggle" on:click={() => {filled = !filled}}>
                     {#if filled}
-                        <i class="fas fa-star"></i>
+                        <i class="icon-hover fas fa-star"></i>
                     {:else}
-                        <i class="far fa-star"></i>
+                        <i class="icon-hover far fa-star"></i>
                     {/if}
 
                 </button>
@@ -421,9 +421,9 @@
                 </div>
                 <button aria-label="Duplicate Sides" on:click={() => {mirrored = !mirrored}}>
                     {#if mirrored}
-                        <i class="fas fa-circle"></i>
+                        <i class="icon-hover fas fa-circle"></i>
                     {:else}
-                        <i class="fas fa-circle-half-stroke"></i>
+                        <i class="icon-hover fas fa-circle-half-stroke"></i>
                     {/if}
                 </button>
             </Hexagon>
@@ -452,10 +452,10 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
         width: 100%;
         height: 100%;
     }
+
     .vis-wrapper {
         flex-direction: column;
         flex: 1;
@@ -467,6 +467,16 @@
         min-width: 16.5rem;
         min-height: 16.5rem;
         position: relative;
+    }
+
+    .icon-hover {
+        color: var(--color-foreground-400);
+        transition: 0.3s;
+    }
+
+    .icon-hover:hover {
+        color: var(--color-surface-200);
+        filter: drop-shadow(0rem 0rem 0.5rem var(--color-primary-100));
     }
 
     canvas {
@@ -490,7 +500,6 @@
         gap: 0.5rem;
         justify-content: center;
         flex-wrap: wrap;
-
     }
     
     .slider-wrapper {
