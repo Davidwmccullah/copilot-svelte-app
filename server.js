@@ -22,6 +22,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  if (req.headers['content-length'] && parseInt(req.headers['content-length']) > 0) {
+    console.log('Denied request with Content-Length:', req.headers['content-length']);
+    return res.status(400).send('Requests with a body are not allowed');
+  }
+  next();
+});
+
 app.use(handler);
 
 const server = https.createServer({
