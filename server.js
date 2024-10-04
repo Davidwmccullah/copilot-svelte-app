@@ -21,6 +21,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(handler);
+
 const server = https.createServer({
   key: readFileSync('/etc/ssl/world-of-whimsy.key'),
   cert: readFileSync('/etc/ssl/world-of-whimsy.pem')
