@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 // deny all requests with a body
 app.use((req, res, next) => {
-  console.log('Request body:', req.body);
+  console.log('Request:', req);
   
   next();
 });
