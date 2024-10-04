@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 // deny all requests with a body
 app.use((req, res, next) => {
-  if (req.body) {
+  if (req.method !== 'GET' && req.body) {
     return res.status(400).send('Body not allowed');
   }
   next();
