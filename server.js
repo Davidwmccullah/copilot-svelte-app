@@ -13,14 +13,13 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, 'static')));
 
+// deny all requests with a body
 app.use((req, res, next) => {
-  if ((req.method === 'GET' || req.method === 'HEAD') && req.body) {
-    return res.status(400).send('GET/HEAD requests should not have a body');
+  if (req.body) {
+    return res.status(400).send('Body not allowed');
   }
   next();
 });
-
-app.use(handler);
 
 const server = https.createServer({
   key: readFileSync('/etc/ssl/world-of-whimsy.key'),
