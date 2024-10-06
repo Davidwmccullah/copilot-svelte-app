@@ -13,15 +13,6 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static(path.join(__dirname, 'static')));
 
-// deny all requests with a body
-app.use((req, res, next) => {
-  console.log('Request Method:', req.method);
-  console.log('Request URL:', req.url);
-  console.log('Request Headers:', req.headers);
-  
-  next();
-});
-
 app.use((req, res, next) => {
   if (req.headers['content-length'] && parseInt(req.headers['content-length']) > 0) {
     console.log('Denied request with Content-Length:', req.headers['content-length']);
