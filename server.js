@@ -21,6 +21,17 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use((req, res, next) => {
+  try {
+    const url = new URL(req.url, `https://${req.headers.host}`);
+
+    next();
+  } catch (error) {
+    console.error('Invalid URL detected:', req.url);
+    return res.status(400).send('Invalid URL');
+  }
+});
+
 app.use(handler);
 
 const server = https.createServer({
